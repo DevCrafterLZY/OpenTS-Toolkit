@@ -7,6 +7,7 @@ import pandas as pd
 from sklearn import logger
 
 from tools.utils.tools import read_log_file, _find_log_files, find_key_by_list_string
+from tools.common.os_contants import RESULT_PATH
 
 
 class FieldNames:
@@ -33,6 +34,7 @@ class FieldNames:
             cls.INFERENCE_DATA,
             cls.LOG_INFO,
         ]
+
 
 # OpenTS 系列中一定存在的字段
 DEFAULT_COLUMNS = [
@@ -106,30 +108,8 @@ def gz2csv(folder_path: str, target_columns: Dict) -> Dict:
         except:
             logger.warning("Load %s fail...", file_path)
 
-    data_dict = {}
+    data_path_dict = {}
     for key, items in files_list_dict.items():
-        data_dict[key] = _load_log_data(files_list_dict[key])
-    return data_dict
-
-
-if __name__ == '__main__':
-    '''
-    target_columns_map中的每个键对应一个目标CSV文件的名称，
-    每个键的值是一个列名的列表，表示该目标文件应包含的指标列。
-    
-    tips: 只要文件中包含了该列表的子集，就会被保存到对应的CSV文件中。
-    '''
-    target_columns_map = {
-        "all_detect_label_metrics.csv": ["accuracy", "f_score", "precision", "recall", "adjust_accuracy",
-                                         "adjust_f_score", "adjust_precision", "adjust_recall", "rrecall",
-                                         "rprecision", "precision_at_k", "rf", "affiliation_f", "affiliation_precision",
-                                         "affiliation_recall", 'typical_anomaly_ratio'],
-        "all_detect_score_metrics.csv": ["auc_roc", "auc_pr", "R_AUC_ROC", "R_AUC_PR", "VUS_ROC", "VUS_PR",
-                                         'typical_anomaly_ratio'],
-        "all_forcast_metrics.csv": ["mae", "mse", "rmse", "mape", "smape", "mase", "wape", "msmape", "mae_norm",
-                                    "mse_norm", "rmse_norm", "mape_norm", "smape_norm", "mase_norm", "wape_norm",
-                                    "msmape_norm"],
-    }
-    log_data = gz2csv(r'result', target_columns_map)
-    for file_name, data in log_data.items():
-        data.to_csv(file_name, index=False)
+        _load_log_data(files_list_dict[key]).to_csv(RESULT_PATH / key, index=False)
+        data_path_dict[key] = RESULT_PATH / key
+    return data_path_dict

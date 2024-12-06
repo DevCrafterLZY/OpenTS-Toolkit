@@ -1,7 +1,0 @@
-strategy_args,metric_name,"DCdetector;{""anormly_ratio"": 1, ""batch_size"": 64, ""num_epochs"": 3, ""patch_size"": [3, 5], ""win_size"": 90}"
-"{""seed"": 2021, ""strategy_name"": ""unfixed_detect_score""}",auc_roc,0.4988658680086963
-"{""seed"": 2021, ""strategy_name"": ""unfixed_detect_score""}",auc_pr,0.1413789211734957
-"{""seed"": 2021, ""strategy_name"": ""unfixed_detect_score""}",R_AUC_ROC,0.543035217427983
-"{""seed"": 2021, ""strategy_name"": ""unfixed_detect_score""}",R_AUC_PR,0.2535553444229207
-"{""seed"": 2021, ""strategy_name"": ""unfixed_detect_score""}",VUS_ROC,0.540452251943558
-"{""seed"": 2021, ""strategy_name"": ""unfixed_detect_score""}",VUS_PR,0.2466613335546786
