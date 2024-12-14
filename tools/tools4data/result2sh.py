@@ -41,6 +41,7 @@ def process_model_params(model_params, row):
     model_params["anomaly_ratio"] = float(row["typical_anomaly_ratio"])
     return json.dumps(model_params)
 
+
 def generate_label_script(row):
     model_name = row['model_name']
     model_module_name = MODEL_NAME_MAP[model_name]
@@ -95,8 +96,9 @@ if __name__ == '__main__':
         path = f'multivariate_detection/detect_score/{dataset_name}_script'
         os.makedirs(path, exist_ok=True)
         script_filename = f'{path}/{model_name}.sh'
-        with open(script_filename, 'w') as score_file:
+        with open(script_filename, 'w', newline='') as score_file:
             score_file.write(score_script + '\n')
+            score_file.write('\n')
 
     for index, row in label_result.iterrows():
         label_script = generate_label_script(row)
@@ -106,5 +108,6 @@ if __name__ == '__main__':
         path = f'multivariate_detection/detect_label/{dataset_name}_script'
         os.makedirs(path, exist_ok=True)
         script_filename = f'{path}/{model_name}.sh'
-        with open(script_filename, 'w') as label_file:
+        with open(script_filename, 'w', newline='') as label_file:
             label_file.write(label_script + '\n')
+            label_file.write('\n')

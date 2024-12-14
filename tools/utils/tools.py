@@ -22,6 +22,7 @@ def _find_log_files(directory: str) -> List[str]:
                 log_files.append(os.path.join(root, file))
     return log_files
 
+
 def read_log_file(fn: str) -> pd.DataFrame:
     ext = os.path.splitext(fn)[1]
     compress_method = get_compress_method_from_ext(ext)
@@ -58,5 +59,3 @@ def decompress(data: bytes, method: str = "gz") -> Dict[str, str]:
     if method != "gz":
         raise NotImplementedError("Only 'gz' method is supported by now")
     return decompress_gz(data)
-
-

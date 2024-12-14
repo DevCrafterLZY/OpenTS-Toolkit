@@ -2,18 +2,6 @@ import os
 
 import pandas as pd
 
-from constant import MODEL_MAP, DATA_NAME2CSV_MAP
-
-metic_map = {
-    "F": "affiliation_f",
-    "AUC": "auc_roc",
-}
-
-type_m_map = {
-    "label": "F",
-    "score": "AUC",
-}
-
 
 def find_target_row(target: pd.DataFrame, detailed_file: str, metric_name: str) -> str:
     abs_detailed_file_path = os.path.abspath(detailed_file)

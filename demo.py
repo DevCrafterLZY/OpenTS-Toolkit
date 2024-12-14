@@ -34,8 +34,6 @@ if __name__ == "__main__":
 
     '''
     寻找最好的结果demo
-
-    
     '''
     save_path = csv2best(r"result/all_detail_detect_score_metrics.csv", "auc_roc",
                          best_save_path="tmp/best_auc_roc.csv")
