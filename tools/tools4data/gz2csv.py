@@ -4,10 +4,10 @@ from parser import ParserError
 from typing import List, Dict
 
 import pandas as pd
-from sklearn import logger
 
-from tools.utils.tools import read_log_file, _find_log_files, find_key_by_list_string
+from tools.common.logger import logger
 from tools.common.os_contants import RESULT_PATH
+from tools.tools4data.tools import read_log_file, _find_log_files, find_key_by_list_string
 
 
 class FieldNames:
@@ -110,6 +110,7 @@ def gz2csv(folder_path: str, target_columns: Dict) -> Dict:
 
     data_path_dict = {}
     for key, items in files_list_dict.items():
-        _load_log_data(files_list_dict[key]).to_csv(RESULT_PATH / key, index=False)
-        data_path_dict[key] = RESULT_PATH / key
+        path = os.path.join(RESULT_PATH, key)
+        _load_log_data(files_list_dict[key]).to_csv(path, index=False)
+        data_path_dict[key] = path
     return data_path_dict

@@ -2,6 +2,8 @@ import os
 
 import pandas as pd
 
+from tools.common.logger import logger
+
 
 def find_target_row(target: pd.DataFrame, detailed_file: str, metric_name: str) -> str:
     abs_detailed_file_path = os.path.abspath(detailed_file)
@@ -16,7 +18,7 @@ def find_target_row(target: pd.DataFrame, detailed_file: str, metric_name: str) 
                         detailed_data["file_name"] == dataset_name and
                         round(detailed_data[metric_name], 3) == metric_val):
                     res.append(detailed_data.values)
-                    print(detailed_data)
+                    logger.info(detailed_data)
                     break
     res = pd.DataFrame(data=res)
     origin_dir = os.path.dirname(abs_detailed_file_path)

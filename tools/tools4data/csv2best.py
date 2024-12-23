@@ -11,13 +11,13 @@ def csv2best_detail(
         origin_file_path: str,
         col_name: str,
         save_path: str = "best_detail_result.csv"
-) -> Path:
+) -> str:
     abs_origin_path = os.path.abspath(origin_file_path)
     data = pd.read_csv(abs_origin_path)
     data = data.dropna(subset=['model_name', 'file_name', 'strategy_args', col_name])
     best_result = data.loc[data.groupby(['model_name', 'file_name'])[col_name].idxmax()]
 
-    save_path = RESULT_PATH / save_path
+    save_path = os.path.join(RESULT_PATH, save_path)
 
     folder = os.path.dirname(save_path)
     if not os.path.exists(folder):
@@ -33,14 +33,14 @@ def csv2best(
         model_names: Optional[List] = None,
         detail_best_save_path: Optional[str] = None,
         best_save_path: Optional[str] = None,
-) -> Path:
+) -> (str, str):
     if best_save_path is None:
         best_save_path = f"best_{col_name}.csv"
     if detail_best_save_path is None:
         detail_best_save_path = f"best_detail_{col_name}.csv"
 
-    best_save_path = RESULT_PATH / best_save_path
-    detail_best_save_path = RESULT_PATH / detail_best_save_path
+    best_save_path = os.path.join(RESULT_PATH, best_save_path)
+    detail_best_save_path = os.path.join(RESULT_PATH, detail_best_save_path)
 
     best_detail_result_path = csv2best_detail(origin_file_path, col_name, detail_best_save_path)
     data = pd.read_csv(best_detail_result_path)
@@ -61,4 +61,4 @@ def csv2best(
     if not os.path.exists(folder):
         os.makedirs(folder)
     all_combinations.to_csv(best_save_path)
-    return best_save_path
+    return best_save_path, best_detail_result_path

@@ -48,19 +48,19 @@ def generate_label_script(row):
     model_params = row['model_params']
     model_params = process_model_params(model_params, row)
     file_name = row["file_name"]
+    adapter = MODEL_ADAPTER.get(model_name, None)
+    adapter_part = f' --adapter "{adapter}"' if adapter is not None else ""
+
     script = (
         f'python ./scripts/run_benchmark.py '
         f'--config-path "unfixed_detect_label_multi_config.json" '
         f'--data-name-list "{file_name}" '
         f'--model-name "{model_module_name}" '
-        f'--model-hyper-params \'{model_params}\' '
+        f'--model-hyper-params \'{model_params}\'{adapter_part} '
         f'--gpus 0 --num-workers 1 --timeout 60000 '
         f'--save-path "label/{model_name}"'
     )
 
-    adapter = MODEL_ADAPTER.get(model_name, None)
-    if adapter is not None:
-        script += f' --adapter "{adapter}"'
     return script
 
 
@@ -69,18 +69,18 @@ def generate_score_script(row):
     model_module_name = MODEL_NAME_MAP[model_name]
     model_params = row['model_params']
     file_name = row["file_name"]
+    adapter = MODEL_ADAPTER.get(model_name, None)
+    adapter_part = f' --adapter "{adapter}"' if adapter is not None else ""
     script = (
         f'python ./scripts/run_benchmark.py '
         f'--config-path "unfixed_detect_score_multi_config.json" '
         f'--data-name-list "{file_name}" '
         f'--model-name "{model_module_name}" '
-        f'--model-hyper-params \'{model_params}\' '
+        f'--model-hyper-params \'{model_params}\'{adapter_part} '
         f'--gpus 0 --num-workers 1 --timeout 60000 '
         f'--save-path "score/{model_name}"'
     )
-    adapter = MODEL_ADAPTER.get(model_name, None)
-    if adapter is not None:
-        script += f' --adapter "{adapter}"'
+
     return script
 
 
@@ -96,8 +96,8 @@ if __name__ == '__main__':
         path = f'multivariate_detection/detect_score/{dataset_name}_script'
         os.makedirs(path, exist_ok=True)
         script_filename = f'{path}/{model_name}.sh'
-        with open(script_filename, 'w', newline='') as score_file:
-            score_file.write(score_script + '\n')
+        with open(script_filename, 'w', newline='\n') as score_file:
+            score_file.write(score_script)
             score_file.write('\n')
 
     for index, row in label_result.iterrows():
@@ -108,6 +108,6 @@ if __name__ == '__main__':
         path = f'multivariate_detection/detect_label/{dataset_name}_script'
         os.makedirs(path, exist_ok=True)
         script_filename = f'{path}/{model_name}.sh'
-        with open(script_filename, 'w', newline='') as label_file:
-            label_file.write(label_script + '\n')
+        with open(script_filename, 'w', newline='\n') as label_file:
+            label_file.write(label_script)
             label_file.write('\n')
