@@ -10,9 +10,9 @@
 - **运行示例**（以 TFB 为例）：
 
 ```shell
-(TFB) root@96444813d88c:/home/TFB# python regression_test/regression_test.py
+(TFB) root@96444813d88c:/home/TFB# python TFB_regression_test/regression_test.py
 ```
-> ⚠️ 请确保在TFB或TAB的虚拟环境中运行，并且运行目录为TFB或TAB根目录。
+> ⚠️ 请确保在TFB或TAB对应的虚拟环境中运行，并且运行目录为TFB或TAB根目录。
 
 回归测试完成后，每次回归测试完成后，会在 `TFB_regression_test/val_result` 目录下生成一个以当前时间戳命名的子目录，包含以下内容：
 
