@@ -48,7 +48,7 @@ subprocess.run(["bash", test_sh, python_path, ROOT_PATH, model_results_path])
 
 log_data = convert_gz_to_csv(model_results_absolute_path)
 os.makedirs(val_diff_result_path, exist_ok=True)
-log_data.to_csv(f"{val_diff_result_path}/{time_stamp}.csv", index=False)
+log_data.to_csv(f"{CURRENT_DIR}/{val_diff_result_path}/{time_stamp}.csv", index=False)
 
 example = pd.read_csv(f"{EXAMPLE_DIR}/example_output.csv")
 diff = show_diff(example, log_data)
