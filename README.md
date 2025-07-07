@@ -3,7 +3,7 @@
 本工具集旨在辅助处理 OpenTS 系列项目（包括 TFB、TAB 和 FoundTS）的运行结果。
 
 > 📦 **按需下载组件：**  
-> 如果你只需要其中的某个组件（例如TFB回归测试），请前往 [Releases 页面](https://github.com/yourname/OpenTS-Toolkit/releases) 下载，无需完整克隆整个仓库。
+> 如果你只需要其中的某个组件（例如TFB回归测试），请前往 [Releases 文件夹](https://github.com/DevCrafterLZY/OpenTS-Toolkit/tree/main/releases) 下载，无需完整克隆整个仓库。
 
 ### TFB_regression_test 与 TAB_regression_test
 
