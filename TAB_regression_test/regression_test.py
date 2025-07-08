@@ -39,19 +39,37 @@ def show_diff(example_data, data2):
 
 python_path = sys.executable
 time_stamp = datetime.now().strftime("%Y%m%d%H%M%S")
-model_results_path = f"regression_test/{time_stamp}"
-model_results_absolute_path = os.path.join(ROOT_PATH, "result", model_results_path)
+model_results_dir = f"regression_test/{time_stamp}"
 val_diff_result_path = f"{CURRENT_DIR}/val_result/{time_stamp}"
 
-test_sh = f"{EXAMPLE_DIR}/test.sh"
-subprocess.run(["bash", test_sh, python_path, ROOT_PATH, model_results_path])
+test_names = [
+    "un_label",
+    "un_score",
+    "mu_label",
+    "mu_score",
+]  # select form un_label, un_score, mu_label, mu_score
 
-log_data = convert_gz_to_csv(model_results_absolute_path)
-os.makedirs(val_diff_result_path, exist_ok=True)
-log_data.to_csv(f"{val_diff_result_path}/{time_stamp}.csv", index=False)
+target_table_columns = {
+    "label.csv": ["accuracy", "f_score", "precision", "recall", "adjust_accuracy", "adjust_f_score",
+                  "adjust_precision", "adjust_recall", "rrecall", "rprecision", "precision_at_k", "rf",
+                  "affiliation_f", "affiliation_precision", "affiliation_recall", 'typical_anomaly_ratio'],
+    "score.csv": ["auc_roc", "auc_pr", "R_AUC_ROC", "R_AUC_PR", "VUS_ROC", "VUS_PR", 'typical_anomaly_ratio'],
+}
 
-example = pd.read_csv(f"{EXAMPLE_DIR}/example_output.csv")
-diff = show_diff(example, log_data)
-diff.to_csv(f"{val_diff_result_path}/{time_stamp}_diff.csv", index=False)
-print(f"Saving new results to CSV: {val_diff_result_path}/{time_stamp}.csv")
-print(f"Saving difference results to CSV: {val_diff_result_path}/{time_stamp}_diff.csv")
+for test_name in test_names:
+    model_results_path = f"{model_results_dir}/{test_name}"
+    model_results_absolute_path = os.path.join(ROOT_PATH, "result", model_results_path)
+    result_name = f"{test_name}_{time_stamp}"
+    test_sh = f"{EXAMPLE_DIR}/{test_name}.sh"
+
+    subprocess.run(["bash", test_sh, python_path, ROOT_PATH, model_results_path])
+
+    _, log_data = convert_gz_to_csv(model_results_absolute_path, target_table_columns).popitem()
+    os.makedirs(val_diff_result_path, exist_ok=True)
+    log_data.to_csv(f"{val_diff_result_path}/{result_name}.csv", index=False)
+
+    example = pd.read_csv(f"{EXAMPLE_DIR}/example_{test_name}.csv")
+    diff = show_diff(example, log_data)
+    diff.to_csv(f"{val_diff_result_path}/{result_name}_diff.csv", index=False)
+    print(f"Saving new results to CSV: {val_diff_result_path}/{result_name}.csv")
+    print(f"Saving difference results to CSV: {val_diff_result_path}/{result_name}_diff.csv")
